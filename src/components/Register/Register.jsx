@@ -1,6 +1,10 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const Register = () => {
+
+  const { createUser, profileUpdate } = useContext(AuthContext);
   const handleRegister = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -8,6 +12,23 @@ const Register = () => {
     const email = form.email.value;
     const password = form.password.value;
     console.log(name, email, password);
+    createUser(email, password)
+      .then(result => {
+        profileUpdate(name)
+          .then(() => {
+          console.log("profile updated")
+          }).catch(error => {
+          console.log(error)
+          })
+        const user = result.user;
+        console.log(user)
+      }).catch(error => {
+      console.log(error)
+    })
+
+
+      
+    
   };
 
   return (
@@ -51,21 +72,21 @@ const Register = () => {
                 className="input input-bordered"
               />
             </div>
+            <label className="label">
+              <Link
+                to={"/login"}
+                href="#"
+                className="label-text-alt link link-hover"
+              >
+                Have an account? please login
+              </Link>
+            </label>
             <div className="form-control mt-6">
               <button className="btn btn-primary" type="submit">
                 Register
               </button>
             </div>
           </form>
-          <label className="label ml-6">
-            <Link
-              to={"/login"}
-              href="#"
-              className="label-text-alt link link-hover"
-            >
-              Have an account? please login
-            </Link>
-          </label>
         </div>
       </div>
     </div>
